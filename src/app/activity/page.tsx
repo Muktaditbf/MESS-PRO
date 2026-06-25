@@ -115,11 +115,11 @@ export default function ActivityPage() {
                         {log.description}
                       </p>
                       
-                      {log.metadata?.before && log.metadata?.after && (
+                      {log.metadata && typeof log.metadata === 'object' && 'before' in log.metadata && 'after' in log.metadata && (
                         <div className="mt-3 p-2 rounded bg-base/50 text-xs text-text-muted font-mono flex items-center gap-2 overflow-x-auto">
-                          <span className="line-through opacity-70">{JSON.stringify(log.metadata.before)}</span>
+                          <span className="line-through opacity-70">{JSON.stringify((log.metadata as any).before)}</span>
                           <span className="text-text-secondary">→</span>
-                          <span className="text-teal">{JSON.stringify(log.metadata.after)}</span>
+                          <span className="text-teal">{JSON.stringify((log.metadata as any).after)}</span>
                         </div>
                       )}
                     </div>
