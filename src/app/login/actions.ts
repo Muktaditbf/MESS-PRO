@@ -11,11 +11,12 @@ export async function loginAction(name: string, password: string) {
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('id, name, must_change_password')
-    .eq('name', name.trim())
+    .ilike('name', name.trim())
     .single();
 
   if (profileError || !profile) {
-    return { error: 'Invalid name or password' };
+    console.error("Profile error:", profileError);
+    return { error: profileError ? `Database error: ${profileError.message}` : 'User not found in profiles. Did you run the SQL script?' };
   }
 
   // 2. Derive dummy email
@@ -28,7 +29,8 @@ export async function loginAction(name: string, password: string) {
   });
 
   if (signInError) {
-    return { error: 'Invalid name or password' };
+    console.error("Sign in error:", signInError);
+    return { error: `Auth error: ${signInError.message}` };
   }
 
   // 4. Log the login
